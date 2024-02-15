@@ -71,9 +71,13 @@ public class TaskRestController {
     public ResponseEntity<Task> handelFindTask(
             @PathVariable("id") UUID taskId
     ) {
-        return ResponseEntity
-                .of(this.taskRepository.findById(taskId));
+        return this.taskRepository.findById(taskId)
+                .map(task -> ResponseEntity
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(task))
+                .orElse(ResponseEntity
+                        .notFound()
+                        .build());
     }
-
-
 }
